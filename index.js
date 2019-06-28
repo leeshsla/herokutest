@@ -2,7 +2,7 @@ var express = require('express')
 var app = express()
 var fs = require('fs');
 var path = require('path');
-
+ 
 var template = {
   HTML:function(title, list, body, control){
     return `
@@ -33,6 +33,7 @@ var template = {
 }
 
 app.set('port', (process.env.PORT || 5000))
+
 app.get('/', function(request, response) { 
   fs.readdir('./data', function(error, filelist){
     var title = 'Welcome';
@@ -46,29 +47,24 @@ app.get('/', function(request, response) {
   });
 });
  
+
 app.get('/page/:pageId', function(request, response) { 
   fs.readdir('./data', function(error, filelist){
     var filteredId = path.parse(request.params.pageId).base;
     fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
-      var title = request.params.pageId;
-      var Title = Html(title);
-      var Description = Html(description, {
-        allowedTags:['h1']
-      });
-      var list = template.list(filelist);
-      var html = template.HTML(Title, list,
-        `<h2>${Title}</h2>${Description}`,
-        ` <a href="/create">create</a>
-          <a href="/update?id=${Title}">update</a>
-          <form action="delete_process" method="post">
-            <input type="hidden" name="id" value="${Title}">
-            <input type="submit" value="delete">
-          </form>`
-      );
-      response.send(html);
+  fs.readdir('./data', function(error, filelist){
+    var title = 'Welcome';
+    var description = 'Hello, Node.js';
+    var list = template.list(filelist);
+    var html = template.HTML(title, list,
+      `<h2>${title}</h2>${description}`,
+      `<a href="/create">create</a>`
+    ); 
+    response.send(html);
     });
   });
 });
+ 
  
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))

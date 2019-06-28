@@ -38,7 +38,6 @@ app.set('port', (process.env.PORT || 5000))
 app.get('/', function(req, res) { 
     var _url = request.url;
     var queryData = url.parse(_url, true).query;
-    var pathname = url.parse(_url, true).pathname;
       if(queryData.id === undefined){
         fs.readdir('./data', function(error, filelist){
           var title = 'Welcome';
@@ -59,6 +58,41 @@ app.get('/', function(req, res) {
       }
 });
  
+app.get('/create_process', function(req, res) { 
+        var body = '';
+      request.on('data', function(data){
+          body += data;
+      });
+      request.on('end', function(){
+          var post = qs.parse(body);
+          var title = post.title;
+          var description = post.description;
+          fs.writeFile(`data/${title}`, description, 'utf8', function(err){
+            response.send();
+          })
+      });
+});
+
+app.get('/create', function(req, res) { 
+        fs.readdir('./data', function(error, filelist){
+        var title = 'WEB - create';
+        var list = templateList(filelist);
+        var template = templateHTML(title, list, `
+          <form action="http://localhost:3000/create_process" method="post">
+            <p><input type="text" name="title" placeholder="title"></p>
+            <p>
+              <textarea name="description" placeholder="description"></textarea>
+            </p>
+            <p>
+              <input type="submit">
+            </p>
+          </form>
+        `);
+        response.writeHead(200);
+        response.end(template);
+      });
+});
+
 app.get('/page', function(req, res) { 
   return res.send('/page');
 });

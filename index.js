@@ -1,6 +1,8 @@
 var express = require('express')
 var app = express()
 var fs = require('fs');
+var path = require('path');
+var qs = require('querystring');
  
 var template = {
   HTML:function(title, list, body, control){

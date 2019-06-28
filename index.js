@@ -1,8 +1,6 @@
 var express = require('express')
 var app = express()
 var fs = require('fs');
-var path = require('path');
-var sanitizeHtml = require('sanitize-html');
  
 var template = {
   HTML:function(title, list, body, control){
@@ -25,7 +23,7 @@ var template = {
     var list = '<ul>';
     var i = 0;
     while(i < filelist.length){
-      list = list + `<li><a href="/page/${filelist[i]}">${filelist[i]}</a></li>`;
+      list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
       i = i + 1;
     }
     list = list+'</ul>';
@@ -48,6 +46,7 @@ app.get('/', function(request, response) {
   });
 });
  
+
 app.get('/page/:pageId', function(request, response) { 
   response.send(request.params);
 });

@@ -1,7 +1,6 @@
 var express = require('express')
 var app = express()
 var fs = require('fs');
-var path = require('path');
  
 var template = {
   HTML:function(title, list, body, control){
@@ -50,9 +49,6 @@ app.get('/', function(request, response) {
 
 app.get('/page/:pageId', function(request, response) { 
   fs.readdir('./data', function(error, filelist){
-    var filteredId = path.parse(request.params.pageId).base;
-    fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
-  fs.readdir('./data', function(error, filelist){
     var title = 'Welcome';
     var description = 'Hello, Node.js';
     var list = template.list(filelist);
@@ -61,10 +57,8 @@ app.get('/page/:pageId', function(request, response) {
       `<a href="/create">create</a>`
     ); 
     response.send(html);
-    });
   });
 });
- 
  
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))

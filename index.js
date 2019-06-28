@@ -36,6 +36,9 @@ function templateList(filelist){
 app.set('port', (process.env.PORT || 5000))
 
 app.get('/', function(req, res) { 
+    var _url = request.url;
+    var queryData = url.parse(_url, true).query;
+    var pathname = url.parse(_url, true).pathname;
       if(queryData.id === undefined){
         fs.readdir('./data', function(error, filelist){
           var title = 'Welcome';
